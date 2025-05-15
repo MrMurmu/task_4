@@ -79,10 +79,9 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 10, 60, 32),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Get.to(() => HomeScreen());
-
           },
         ),
       ),

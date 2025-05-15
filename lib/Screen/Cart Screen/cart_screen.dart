@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_4/Controller/cart_controller.dart';
-import 'package:task_4/Screen/Cart%20Screen/quantity_controller.dart';
-import 'package:task_4/Screen/Home%20Screen/product_card.dart';
+import 'package:task_4/Const/quantity_controller.dart';
+import 'package:task_4/Const/product_card.dart';
 
 class CartScreen extends StatelessWidget {
   CartScreen({super.key});

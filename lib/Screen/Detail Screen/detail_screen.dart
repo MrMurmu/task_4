@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:task_4/Const/build_budget_button.dart';
 import 'package:task_4/Controller/cart_controller.dart';
 import 'package:task_4/Controller/favorite_controller.dart';
 import 'package:task_4/Model/product_model.dart';
@@ -21,69 +22,10 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   final favController = Get.put(FavoriteController());
   final cartController = Get.put(CartController());
+  final buildButton = BuildBudgetButton();
   int currentImage = 0;
 
-  // Favorite icon with badge
-  Widget buildFavIcon() {
-    return Obx(() {
-      final favCount = favController.favoriteProduct.length;
-      return Stack(
-        children: [
-          IconButton(
-            onPressed: () => Get.to(FavoriteScreen()),
-            icon: const Icon(Icons.favorite, color: Colors.white),
-          ),
-          if (favCount > 0)
-            Positioned(
-              right: 6,
-              top: 6,
-              child: _buildBadge(favCount, Colors.red),
-            ),
-        ],
-      );
-    });
-  }
-
-  // Cart icon with badge
-  Widget buildCartIcon() {
-    return Obx(() {
-      final cartCount = cartController.cartItems.length;
-      return Stack(
-        children: [
-          IconButton(
-            onPressed: () => Get.to(CartScreen()),
-            icon: const Icon(
-              Icons.shopping_cart_checkout_outlined,
-              color: Colors.white,
-            ),
-          ),
-          if (cartCount > 0)
-            Positioned(
-              right: 6,
-              top: 6,
-              child: _buildBadge(cartCount, Colors.green),
-            ),
-        ],
-      );
-    });
-  }
-
-  // Common badge builder
-  Widget _buildBadge(int count, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-      child: Text(
-        '$count',
-        style: const TextStyle(color: Colors.white, fontSize: 10),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +41,7 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
         backgroundColor: Colors.blue.shade700,
         centerTitle: true,
-        actions: [buildFavIcon(), buildCartIcon()],
+        actions: [buildButton.buildFavIcon(), buildButton.buildCartIcon()],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
