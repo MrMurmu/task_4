@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:task_4/Controller/auth_controller.dart';
 import 'package:task_4/Controller/favorite_controller.dart';
 import 'package:task_4/Model/product_model.dart';
 import 'package:task_4/Const/quantity_controller.dart';
@@ -20,6 +20,7 @@ class DetailImgSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favController = Get.put(FavoriteController());
+    final authController = Get.put(AuthController());
     return Stack(
       children: [
         Container(
@@ -29,11 +30,20 @@ class DetailImgSlider extends StatelessWidget {
             child: PageView.builder(
               onPageChanged: onChange,
               itemBuilder: (context, index) {
-                return Hero(tag: image, child: Image.network(image, loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null)
-                  return child;
-                  return Shimmer.fromColors(child: Container(height: 250, color: Colors.white,), baseColor: Colors.grey.shade300, highlightColor: Colors.grey.shade100);
-                },));
+                return Hero(
+                  tag: image,
+                  child: Image.network(
+                    image,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Shimmer.fromColors(
+                        child: Container(height: 250, color: Colors.white),
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                      );
+                    },
+                  ),
+                );
               },
             ),
           ),
@@ -43,7 +53,21 @@ class DetailImgSlider extends StatelessWidget {
           right: 0,
           child: Obx(
             () => IconButton(
-              onPressed: () => favController.toggleFavorite(product),
+              // onPressed: () => favController.toggleFavorite(product),
+              onPressed: () {
+                if (authController.isLoggedIn.value) {
+                  favController.toggleFavorite(product);
+                } else {
+                  Get.snackbar(
+                    'Login Required',
+                    'Please login to add favorites.',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: Colors.redAccent,
+                    colorText: Colors.white,
+                    duration: Duration(seconds: 2),
+                  );
+                }
+              },
               icon: Icon(
                 favController.isFavorite(product)
                     ? Icons.favorite

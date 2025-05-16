@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:task_4/Controller/cart_controller.dart';
+import 'package:task_4/Controller/auth_controller.dart'; // Add this import
 import 'package:task_4/Model/product_model.dart';
 
 class QuantityControl extends StatelessWidget {
@@ -10,14 +10,27 @@ class QuantityControl extends StatelessWidget {
   QuantityControl({required this.product});
 
   final CartController cartController = Get.find();
+  final AuthController authController = Get.find(); // Initialize AuthController
 
   @override
   Widget build(BuildContext context) {
-    
     return Obx(() {
       if (!cartController.isInCart(product)) {
         return IconButton(
-          onPressed: () => cartController.toggleCart(product),
+          onPressed: () {
+            if (authController.isLoggedIn.value) {
+              cartController.toggleCart(product);
+            } else {
+              Get.snackbar(
+                'Login Required',
+                'Please login to add to cart.',
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.redAccent,
+                colorText: Colors.white,
+                duration: Duration(seconds: 2),
+              );
+            }
+          },
           icon: const Icon(Icons.shopping_cart_outlined, color: Colors.blue),
         );
       } else {
@@ -44,8 +57,20 @@ class QuantityControl extends StatelessWidget {
                         IconButton(
                           padding: EdgeInsets.zero,
                           iconSize: 20,
-                          onPressed:
-                              () => cartController.decrementQuantity(product),
+                          onPressed: () {
+                            if (authController.isLoggedIn.value) {
+                              cartController.decrementQuantity(product);
+                            } else {
+                              Get.snackbar(
+                                'Login Required',
+                                'Please login to modify cart.',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.redAccent,
+                                colorText: Colors.white,
+                                duration: Duration(seconds: 2),
+                              );
+                            }
+                          },
                           icon: const Icon(
                             Icons.remove_circle_outline,
                             color: Colors.red,
@@ -58,8 +83,20 @@ class QuantityControl extends StatelessWidget {
                         IconButton(
                           padding: EdgeInsets.zero,
                           iconSize: 20,
-                          onPressed:
-                              () => cartController.incrementQuantity(product),
+                          onPressed: () {
+                            if (authController.isLoggedIn.value) {
+                              cartController.incrementQuantity(product);
+                            } else {
+                              Get.snackbar(
+                                'Login Required',
+                                'Please login to modify cart.',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.redAccent,
+                                colorText: Colors.white,
+                                duration: Duration(seconds: 2),
+                              );
+                            }
+                          },
                           icon: const Icon(
                             Icons.add_circle_outline,
                             color: Colors.green,

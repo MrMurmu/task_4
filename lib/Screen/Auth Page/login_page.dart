@@ -19,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   final AuthController _authController = Get.put(AuthController());
 
-  // final AuthController _authController = Get.put(AuthController());
 
   @override
   void dispose() {
@@ -42,27 +41,28 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() {
-    if (_formKey.currentState!.validate()) {
-      final success = _authController.login(
-        _usernameController.text.trim(),
-        _passwordController.text.trim(),
-      );
+  if (_formKey.currentState!.validate()) {
+    final success = _authController.login(
+      _usernameController.text.trim(),
+      _passwordController.text.trim(),
+    );
 
-      if (success) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      } else {
-        Get.snackbar(
-          'Login Failed',
-          'Invalid username or password',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
+    if (success) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else {
+      Get.snackbar(
+        'Login Failed',
+        'Invalid username or password',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

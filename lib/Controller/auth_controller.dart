@@ -1,33 +1,85 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:task_4/Controller/api_controller.dart';
 import '../Model/auth_model.dart';
 
 class AuthController extends GetxController {
-  final box = GetStorage();
+  var isLoggedIn = false.obs;
+  final storage = GetStorage();
 
-  void signup(String userName, String email, String password) {
-    final user = AuthModel(userName: userName, email: email, password: password);
-    box.write('user', user.toMap());
-  }
+  var currentUser = Rxn<AuthModel>();
 
-  AuthModel? getUser() {
-    final data = box.read('user');
-    if (data != null) {
-      return AuthModel.fromMap(Map<String, dynamic>.from(data));
+  @override
+  void onInit() {
+    final userMap = storage.read('currentUser');
+    if (userMap != null) {
+      currentUser.value = AuthModel.fromMap(Map<String, dynamic>.from(userMap));
+      isLoggedIn.value = true;
     }
-    return null;
+    super.onInit();
   }
 
+  // Login from list of users
   bool login(String userName, String password) {
-    final user = getUser();
-    if (user != null && user.userName == userName && user.password == password) {
-      box.write('isLoggedIn', true);
+    final userList = storage.read('registeredUsers') ?? [];
+    final users = List<Map<String, dynamic>>.from(userList);
+
+    final matchingUser = users.firstWhereOrNull((user) {
+      final auth = AuthModel.fromMap(user);
+      return auth.userName == userName && auth.password == password;
+    });
+
+    if (matchingUser != null) {
+      final loggedInUser = AuthModel.fromMap(matchingUser);
+      currentUser.value = loggedInUser;
+      storage.write('currentUser', loggedInUser.toMap());
+      isLoggedIn.value = true;
+      storage.write('isLoggedIn', true);
       return true;
+    } else {
+      print('Invalid username or password');
+      return false;
     }
-    return false;
   }
 
+  // Register new user
+  bool signup(String userName, String email, String password) {
+    final userList = storage.read('registeredUsers') ?? [];
+    final users = List<Map<String, dynamic>>.from(userList);
+
+    final exists = users.any((user) {
+      final auth = AuthModel.fromMap(user);
+      return auth.userName == userName;
+    });
+
+    if (exists) {
+      print('Username already exists');
+      return false;
+    }
+
+    final newUser = AuthModel(
+      userName: userName,
+      email: email,
+      password: password,
+    );
+    users.add(newUser.toMap());
+
+    storage.write('registeredUsers', users);
+    // storage.write('currentUser', newUser.toMap());
+    // currentUser.value = newUser;
+    // isLoggedIn.value = true;
+    return true;
+  }
+
+  // Logout
   void logout() {
-    box.write('isLoggedIn', false);
+    storage.remove('currentUser');
+    isLoggedIn.value = false;
+    currentUser.value = null;
+    storage.write('isLoggedIn', false);
+
+    final apiController = Get.find<ApiController>();
+    apiController.productList.clear();
+    apiController.getProduct();
   }
 }

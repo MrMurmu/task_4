@@ -10,6 +10,8 @@ class ProductModel {
   final String category;
   final String thumbnail;
   final String warrantyInformation;
+  final String availabilityStatus;
+  final String returnPolicy;
   final List<String> images;
 
   int quantity; // NEW FIELD (mutable)
@@ -26,6 +28,8 @@ class ProductModel {
     required this.category,
     required this.thumbnail,
     required this.warrantyInformation,
+    required this.returnPolicy,
+    required this.availabilityStatus,
     required this.images,
     this.quantity = 1, // default quantity when added to cart
   });
@@ -41,7 +45,9 @@ class ProductModel {
         brand: json['brand'] ?? '',
         category: json['category'] ?? '',
         thumbnail: json['thumbnail'] ?? '',
+        availabilityStatus: json['availabilityStatus'] ?? '',
         warrantyInformation: json['warrantyInformation'] ?? '',
+        returnPolicy: json['returnPolicy'] ?? '',
         images: List<String>.from(json['images'] ?? []),
         quantity: json['quantity'] ?? 1, // optional if loaded from local DB
       );
@@ -57,7 +63,9 @@ class ProductModel {
         'brand': brand,
         'category': category,
         'thumbnail': thumbnail,
+        'availabilityStatus': availabilityStatus,
         'warrantyInformation': warrantyInformation,
+        'returnPolicy': returnPolicy,
         'images': images,
         'quantity': quantity, // include if saving locally
       };

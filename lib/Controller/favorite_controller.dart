@@ -1,64 +1,50 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../Model/product_model.dart';
+import 'package:task_4/Controller/auth_controller.dart';
+import 'package:task_4/Model/product_model.dart';
 
 class FavoriteController extends GetxController {
-  final _storage = GetStorage();
-  final favoriteProduct = <ProductModel>[].obs;
+  var favorites = <ProductModel>[].obs;
 
-  final _storageKey = 'favorite_list';
+  final storage = GetStorage();
+  final authController = Get.find<AuthController>();
+
+  String get _userKey => authController.currentUser.value?.userName ?? '';
 
   @override
   void onInit() {
+    ever(authController.currentUser, (_) => loadStorage());
+    loadStorage();
     super.onInit();
-    loadFavorites();
   }
 
-  void loadFavorites() {
-    final storedFavorites = _storage.read<List>(_storageKey);
-    if (storedFavorites != null) {
-      favoriteProduct.assignAll(
-        storedFavorites.map(
-          (e) => ProductModel.fromMap(Map<String, dynamic>.from(e)),
-        ),
-      );
+
+  void toggleFavorite(ProductModel p) {
+
+  if (isFavorite(p)) {
+    favorites.removeWhere((item) => item.id == p.id);
+  } else {
+    favorites.add(p);
+  }
+  saveStorage();
+}
+
+  bool isFavorite(ProductModel p) {
+  return favorites.any((item) => item.id == p.id);
+}
+
+  void saveStorage() {
+    if (_userKey.isNotEmpty) {
+      storage.write('${_userKey}_favorites', favorites.map((e) => e.toMap()).toList());
     }
   }
 
-  // void toggleFavorite(ProductModel product) {
-  //   final index = favoriteProduct.indexWhere((item) => item.id == product.id);
-  //   if (index >= 0) {
-  //     favoriteProduct.removeAt(index);
-  //   } else {
-  //     favoriteProduct.add(product);
-  //   }
-  //   saveFavorite();
-  // }
-
-  void toggleFavorite(ProductModel product) {
-    final index = favoriteProduct.indexWhere((item) => item.id == product.id);
-    if (index >= 0) {
-      favoriteProduct.removeAt(index);
+  void loadStorage() {
+    if (_userKey.isNotEmpty) {
+      final favData = storage.read('${_userKey}_favorites') ?? [];
+      favorites.value = favData.map<ProductModel>((e) => ProductModel.fromMap(e)).toList();
     } else {
-      favoriteProduct.insert(0, product);
-    }
-    saveFavorite();
-  }
-
-  bool isFavorite(ProductModel product) {
-    return favoriteProduct.any((item) => item.id == product.id);
-  }
-
-  void saveFavorite() {
-    final data = favoriteProduct.map((e) => e.toMap()).toList();
-    _storage.write(_storageKey, data);
-  }
-
-  void removeFavorite(ProductModel product) {
-    final index = favoriteProduct.indexWhere((item) => item.id == product.id);
-    if (index >= 0) {
-      favoriteProduct.removeAt(index);
-      saveFavorite();
+      favorites.clear();
     }
   }
 }

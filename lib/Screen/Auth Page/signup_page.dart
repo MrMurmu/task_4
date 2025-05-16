@@ -32,18 +32,38 @@ class SignupPageState extends State<SignupPage> {
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) return 'Please enter password';
     if (value.length < 8) return 'Minimum 8 characters required';
-    if (!RegExp(r'[A-Z]').hasMatch(value)) return 'Include at least one uppercase letter';
-    if (!RegExp(r'[a-z]').hasMatch(value)) return 'Include at least one lowercase letter';
+    if (!RegExp(r'[A-Z]').hasMatch(value))
+      return 'Include at least one uppercase letter';
+    if (!RegExp(r'[a-z]').hasMatch(value))
+      return 'Include at least one lowercase letter';
     if (!RegExp(r'\d').hasMatch(value)) return 'Include at least one number';
-    if (!RegExp(r'[!@#\$&*~]').hasMatch(value)) return 'Include at least one special character';
+    if (!RegExp(r'[!@#\$&*~]').hasMatch(value))
+      return 'Include at least one special character';
     return null;
   }
 
   // Simulate sign-up logic
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final newUser = _authController.signup(_usernameController.text, _emailController.text, _passwordController.text);
-      Get.to(() => const LoginPage());
+      final newUserCreated = _authController.signup(
+        _usernameController.text.trim(),
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+
+      if (newUserCreated) {
+        Get.to(() => const LoginPage());
+      } else {
+        Get.snackbar(
+          'Signup Failed',
+          'Username already exists',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red.shade400,
+          colorText: Colors.white,
+          margin: const EdgeInsets.all(10),
+          duration: const Duration(seconds: 3),
+        );
+      }
     }
   }
 
@@ -51,7 +71,8 @@ class SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Signup",
+        title: Text(
+          "Signup",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
@@ -59,7 +80,8 @@ class SignupPageState extends State<SignupPage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 10, 60, 32),),
+        backgroundColor: const Color.fromARGB(255, 10, 60, 32),
+      ),
       backgroundColor: const Color.fromARGB(255, 10, 60, 32),
       body: Center(
         child: Padding(
@@ -94,8 +116,11 @@ class SignupPageState extends State<SignupPage> {
                         borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Enter username' : null,
+                    validator:
+                        (value) =>
+                            value == null || value.isEmpty
+                                ? 'Enter username'
+                                : null,
                   ),
                   SizedBox(height: 15),
                   TextFormField(
@@ -130,7 +155,9 @@ class SignupPageState extends State<SignupPage> {
                       labelStyle: TextStyle(color: Colors.white),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                           color: Colors.white,
                         ),
                         onPressed: () {
@@ -170,7 +197,9 @@ class SignupPageState extends State<SignupPage> {
                   SizedBox(height: 30),
                   Row(
                     children: [
-                      Expanded(child: Divider(color: Colors.white, thickness: 1)),
+                      Expanded(
+                        child: Divider(color: Colors.white, thickness: 1),
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
                         child: Text(
@@ -178,7 +207,9 @@ class SignupPageState extends State<SignupPage> {
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
-                      Expanded(child: Divider(color: Colors.white, thickness: 1)),
+                      Expanded(
+                        child: Divider(color: Colors.white, thickness: 1),
+                      ),
                     ],
                   ),
                   SizedBox(height: 30),
@@ -193,7 +224,10 @@ class SignupPageState extends State<SignupPage> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
                       },
                       child: Text(
                         "LOGIN",

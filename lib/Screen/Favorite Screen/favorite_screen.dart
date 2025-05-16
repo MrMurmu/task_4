@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_4/Const/color_class.dart';
 import 'package:task_4/Controller/cart_controller.dart';
 import 'package:task_4/Controller/favorite_controller.dart';
 import 'package:task_4/Const/product_card.dart';
@@ -16,7 +17,7 @@ class FavoriteScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: appbarBgColor,
         title: const Text(
           "Favorite Products",
           style: TextStyle(
@@ -33,11 +34,15 @@ class FavoriteScreen extends StatelessWidget {
             SizedBox(height: 20,),
             Expanded(
               child: Obx(() {
-                if (favController.favoriteProduct.isEmpty) {
-                  return const Center(child: Text("No favorite added here"));
+                if (favController.favorites.isEmpty) {
+                  return const Center(child: Text("No favorite added here",style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey,
+        ),));
                 } else {
                   return GridView.builder(
-                    itemCount: favController.favoriteProduct.length,
+                    itemCount: favController.favorites.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -46,7 +51,7 @@ class FavoriteScreen extends StatelessWidget {
                           childAspectRatio: 0.58,
                         ),
                     itemBuilder: (context, index) {
-                      final product = favController.favoriteProduct[index];
+                      final product = favController.favorites[index];
 
                       return Stack(
                         children: [

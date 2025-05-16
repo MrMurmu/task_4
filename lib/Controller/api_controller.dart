@@ -31,5 +31,4 @@ class ApiController extends GetxController {
   //     print(category);
   //   }
   // }
-
 }

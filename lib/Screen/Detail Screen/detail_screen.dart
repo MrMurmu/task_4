@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:task_4/Const/build_budget_button.dart';
+import 'package:task_4/Const/color_class.dart';
 import 'package:task_4/Controller/cart_controller.dart';
 import 'package:task_4/Controller/favorite_controller.dart';
 import 'package:task_4/Model/product_model.dart';
-import 'package:task_4/Screen/Cart%20Screen/cart_screen.dart';
-import 'package:task_4/Screen/Detail%20Screen/Widget/app_bar.dart';
 import 'package:task_4/Screen/Detail%20Screen/Widget/detail_image_slider.dart';
 import 'package:task_4/Screen/Detail%20Screen/Widget/item_details.dart';
-import 'package:task_4/Screen/Favorite%20Screen/favorite_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   final ProductModel product;
@@ -22,7 +19,6 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   final favController = Get.put(FavoriteController());
   final cartController = Get.put(CartController());
-  final buildButton = BuildBudgetButton();
   int currentImage = 0;
 
   
@@ -39,9 +35,9 @@ class _DetailScreenState extends State<DetailScreen> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: appbarBgColor,
         centerTitle: true,
-        actions: [buildButton.buildFavIcon(), buildButton.buildCartIcon()],
+        actions: [buildFavIcon(), buildCartIcon()],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -61,6 +57,8 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 SizedBox(height: 10),
                 ItemDetails(product: widget.product),
+                SizedBox(height: 10),
+                Divider(),
                 SizedBox(height: 10),
                 descripTion(),
               ],

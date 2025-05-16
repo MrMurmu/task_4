@@ -9,6 +9,7 @@ import 'package:task_4/Controller/favorite_controller.dart';
 import 'package:task_4/Screen/Auth%20Page/home_page.dart';
 import 'package:task_4/Const/quantity_controller.dart';
 import 'package:task_4/Const/product_card.dart';
+import 'package:task_4/Const/color_class.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final apiController = Get.put(ApiController());
   final favController = Get.put(FavoriteController());
   final authController = Get.put(AuthController());
-  final buildButton = BuildBudgetButton();
+  // final buildButton = BuildBudgetButton();
 
   @override
   void initState() {
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: appbarBgColor,
         automaticallyImplyLeading: false,
         title: const Text(
           "Product List",
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         centerTitle: true,
-        actions: [buildAuthIcon(), buildButton.buildFavIcon(), buildButton.buildCartIcon()],
+        actions: [buildAuthIcon(), buildFavIcon(), buildCartIcon()],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Obx(() {
                 if (apiController.productList.isEmpty) {
                   // return const Center(child: CircularProgressIndicator());
-                  return _buildShimmerLoading();
+                  return _shimmerLoading();
                 }
                 return GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -79,8 +80,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           right: 0,
                           child: Obx(
                             () => IconButton(
-                              onPressed:
-                                  () => favController.toggleFavorite(product),
+                              onPressed: () {
+                                if (authController.isLoggedIn.value) {
+                                  favController.toggleFavorite(product);
+                                } else {
+                                  Get.snackbar(
+                                    'Login Required',
+                                    'Please login to add favorites.',
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    backgroundColor: Colors.redAccent,
+                                    colorText: Colors.white,
+                                    duration: Duration(seconds: 2),
+                                  );
+                                }
+                              },
                               icon: Icon(
                                 favController.isFavorite(product)
                                     ? Icons.favorite
@@ -110,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Loading effect
 
-  Widget _buildShimmerLoading() {
+  Widget _shimmerLoading() {
     return GridView.builder(
       itemCount: 6,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -135,8 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
   // Login/Logout icon widget
   final storage = GetStorage();
 
@@ -155,6 +166,4 @@ class _HomeScreenState extends State<HomeScreen> {
       icon: Icon(isLoggedIn ? Icons.logout : Icons.login, color: Colors.white),
     );
   }
-
-
 }

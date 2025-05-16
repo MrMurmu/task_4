@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_4/Const/color_class.dart';
 import 'package:task_4/Controller/cart_controller.dart';
 import 'package:task_4/Const/quantity_controller.dart';
 import 'package:task_4/Const/product_card.dart';
@@ -14,7 +15,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: appbarBgColor,
         title: const Text(
           "My Cart",
           style: TextStyle(
@@ -29,7 +30,11 @@ class CartScreen extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: Obx(() {
           if (cartController.cartItems.isEmpty) {
-            return const Center(child: Text("Your cart is empty"));
+            return const Center(child: Text("Your cart is empty",style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey,
+        ),));
           } else {
             return GridView.builder(
               itemCount: cartController.cartItems.length,
@@ -53,8 +58,8 @@ class CartScreen extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                     top: 110,
-                            right: 0,
+                      top: 110,
+                      right: 0,
                       child: QuantityControl(product: product),
                     ),
                   ],
@@ -64,7 +69,11 @@ class CartScreen extends StatelessWidget {
           }
         }),
       ),
-      bottomNavigationBar: Obx(() => bottomAppbar()),
+      bottomNavigationBar: Obx(() {
+        return cartController.cartItems.isEmpty
+            ? const SizedBox.shrink()
+            : bottomAppbar();
+      }),
     );
   }
 
@@ -77,14 +86,21 @@ class CartScreen extends StatelessWidget {
             height: 190,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Price Detail", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey),),
+                  Text(
+                    "Price Detail",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
                   Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,28 +108,49 @@ class CartScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Price (${cartController.totalItems} items)",style: TextStyle(fontSize: 16),),
+                          Text(
+                            "Price (${cartController.totalItems} items)",
+                            style: TextStyle(fontSize: 16),
+                          ),
                           SizedBox(height: 5),
-                          Text("Discount",style: TextStyle(fontSize: 16),),
+                          Text("Discount", style: TextStyle(fontSize: 16)),
                           SizedBox(height: 5),
                         ],
                       ),
                       Column(
                         children: [
-                          Text(cartController.actualTotal.toStringAsFixed(2),style: TextStyle(fontSize: 16),),
+                          Text(
+                            cartController.actualTotal.toStringAsFixed(2),
+                            style: TextStyle(fontSize: 16),
+                          ),
                           SizedBox(height: 5),
-                          Text("-${cartController.totalDiscount.toStringAsFixed(2)}",style: TextStyle(fontSize: 16, color: Colors.green),),
+                          Text(
+                            "-${cartController.totalDiscount.toStringAsFixed(2)}",
+                            style: TextStyle(fontSize: 16, color: Colors.green),
+                          ),
                           SizedBox(height: 5),
                         ],
-                      ),                     
+                      ),
                     ],
                   ),
                   Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Total Amount",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                      Text(cartController.totalPrice.toStringAsFixed(2),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),), 
+                      Text(
+                        "Total Amount",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        cartController.totalPrice.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ],

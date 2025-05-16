@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:task_4/Model/product_model.dart';
 
 class ItemDetails extends StatelessWidget {
@@ -89,7 +88,37 @@ class ItemDetails extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: 10),
+          Divider(),
+          SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Availablity:",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  product.availabilityStatus,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                    height: 1.4,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -105,6 +134,34 @@ class ItemDetails extends StatelessWidget {
               Expanded(
                 child: Text(
                   product.warrantyInformation,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                    height: 1.4,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Return Policy:",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  product.returnPolicy,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
