@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shimmer/shimmer.dart';
@@ -60,13 +61,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   // return const Center(child: CircularProgressIndicator());
                   return _shimmerLoading();
                 }
-                return GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.58,
-                  ),
+                return MasonryGridView.builder(
+                  gridDelegate:
+                      const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
                   itemCount: apiController.productList.length,
                   itemBuilder: (context, index) {
                     final product = apiController.productList[index];

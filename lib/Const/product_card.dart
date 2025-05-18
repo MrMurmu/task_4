@@ -17,9 +17,11 @@ class ProductCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DetailScreen(product: product)));
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailScreen(product: product),
+          ),
+        );
       },
       child: Stack(
         children: [
@@ -34,7 +36,10 @@ class ProductCard extends StatelessWidget {
                   spreadRadius: 1,
                 ),
               ],
-              border: Border.all(width: 1, color: Colors.black.withOpacity(0.1)),
+              border: Border.all(
+                width: 1,
+                color: Colors.black.withOpacity(0.1),
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -83,20 +88,33 @@ class ProductCard extends StatelessWidget {
                       const SizedBox(height: 5),
                       Row(
                         children: [
-                          const Text(
+                          Text(
                             "Price :",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54,
                             ),
                           ),
-                          const SizedBox(width: 7),
+                          SizedBox(width: 10),
+                          // Text(
+                          //   "\₹${product.price}",
+                          //   style: const TextStyle(
+                          //     fontSize: 13,
+                          //     color: Colors.red,
+                          //     decoration: TextDecoration.lineThrough,
+                          //     decorationThickness: 2,
+                          //     height: 0.2,
+                          //   ),
+                          // ),
+                          // SizedBox(width: 10),
+
                           Text(
-                            "₹ ${product.price.toString()}",
-                            style: TextStyle(
+                            "₹${(product.price - (product.price * product.discountPercentage / 100)).toStringAsFixed(2)}",
+                            style: const TextStyle(
                               fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey.shade700,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
                             ),
                           ),
                         ],
@@ -122,7 +140,11 @@ class ProductCard extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.star, size: 15, color: Colors.yellow),
+                                const Icon(
+                                  Icons.star,
+                                  size: 15,
+                                  color: Colors.yellow,
+                                ),
                                 const SizedBox(width: 2),
                                 Text(
                                   product.rating.toString(),
@@ -141,12 +163,12 @@ class ProductCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: Colors.green
+                          color: Colors.green,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-      
+
                       // Row(
                       //   mainAxisAlignment: MainAxisAlignment.end,
                       //   children: [
@@ -190,7 +212,7 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           ),
-      
+
           // Favorite Icon (Top Right)
           // Positioned(
           //   top: 5,
@@ -205,7 +227,7 @@ class ProductCard extends StatelessWidget {
           //         ),
           //       )),
           // ),
-      
+
           // Positioned(
           //   top: 80,
           //   right: 0,
