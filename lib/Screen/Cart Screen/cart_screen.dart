@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:task_4/Const/color_class.dart';
 import 'package:task_4/Controller/cart_controller.dart';
@@ -36,14 +37,14 @@ class CartScreen extends StatelessWidget {
           color: Colors.grey,
         ),));
           } else {
-            return GridView.builder(
+            return MasonryGridView.builder(
+                  gridDelegate:
+                      const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
               itemCount: cartController.cartItems.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.58,
-              ),
               itemBuilder: (context, index) {
                 final product = cartController.cartItems[index];
                 return Stack(

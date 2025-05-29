@@ -66,8 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SliverSimpleGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                       ),
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
                   itemCount: apiController.productList.length,
                   itemBuilder: (context, index) {
                     final product = apiController.productList[index];

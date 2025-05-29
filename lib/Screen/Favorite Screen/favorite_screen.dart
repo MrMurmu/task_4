@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:task_4/Const/color_class.dart';
+import 'package:task_4/Controller/api_controller.dart';
 import 'package:task_4/Controller/cart_controller.dart';
 import 'package:task_4/Controller/favorite_controller.dart';
 import 'package:task_4/Const/product_card.dart';
@@ -13,6 +15,7 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apiController = Get.put(ApiController());
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -41,16 +44,16 @@ class FavoriteScreen extends StatelessWidget {
           color: Colors.grey,
         ),));
                 } else {
-                  return GridView.builder(
-                    itemCount: favController.favorites.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 0.58,
-                        ),
-                    itemBuilder: (context, index) {
+                  return MasonryGridView.builder(
+                  gridDelegate:
+                      const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  
+                  itemCount: favController.favorites.length,
+                  itemBuilder: (context, index) {
                       final product = favController.favorites[index];
 
                       return Stack(

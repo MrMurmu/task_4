@@ -10,7 +10,7 @@ class QuantityControl extends StatelessWidget {
   QuantityControl({required this.product});
 
   final CartController cartController = Get.find();
-  final AuthController authController = Get.find(); // Initialize AuthController
+  final AuthController authController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +60,12 @@ class QuantityControl extends StatelessWidget {
                           onPressed: () {
                             if (authController.isLoggedIn.value) {
                               cartController.decrementQuantity(product);
+                              final cartProduct = cartController.cartItems
+                                  .firstWhereOrNull((p) => p.id == product.id);
+                              if (cartProduct == null ||
+                                  cartProduct.quantity < 1) {
+                                cartController.removeFromCart(product);
+                              }
                             } else {
                               Get.snackbar(
                                 'Login Required',
